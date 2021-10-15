@@ -45,7 +45,7 @@ router.post("/upload", upload.single("productImage"), async (req, res) => {
     const {file, body} = req
     
     let cid = await ipfsAdd(fs.readFileSync(`${file.destination}/${file.filename}`))
-    let imgUri = `${cid}`
+    let imgUri = `https://ipfs.io/ipfs/${cid}`
     let productMetaData = {
         name: body.name,
         description: body.description,
