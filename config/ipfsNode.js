@@ -18,14 +18,16 @@ async function ipfsGet(cid){
 }
 
 async function ipfsGetImage(cid){
+    console.log(cid)
     for await (const file of ipfsNode.get(cid)){
         const content = []
         if(file.content){
+            console.log('hi 2')
             for await(const chunk of file.content){
                 content.push(chunk)
             }
-            return URL.createObjectURL(new Blob())
+            return URL.createObjectURL(new Blob(content, {type: mime}))
         }
     }
 }
-module.exports = {ipfsNode, ipfsStart, ipfsAdd, ipfsGet}
+module.exports = {ipfsNode, ipfsStart, ipfsAdd, ipfsGet, ipfsGetImage}

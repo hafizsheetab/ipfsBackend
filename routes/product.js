@@ -1,5 +1,5 @@
 const express = require("express");
-const { ipfsNode, ipfsAdd, ipfsGet } = require("../config/ipfsNode");
+const { ipfsNode, ipfsAdd, ipfsGet, ipfsGetImage } = require("../config/ipfsNode");
 const router = express.Router();
 const Product = require("../Models/Product");
 const multer = require("multer");
@@ -16,13 +16,13 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage
 })
+
 router.get('/', async(req, res) => {
     let products = await Product.find()
     res.json(products)
 })
-router.get("image/:cid", async (req, res) => {
-    
-})
+
+
 router.get("/:cid", async (req, res) => {
     const { cid } = req.params;
     const data = await ipfsGet(cid)
@@ -32,6 +32,14 @@ router.get("/:cid", async (req, res) => {
     // productDb = await populateProduct(productDb)
     res.json(productIpfs);
 });
+
+router.get("/image/:cid", async(req, res) => {
+    console.log('hi')
+    const {cid} = req.params;
+    const url = await ipfsGetImage(cid)
+    console.log(url)
+    res.json(url)
+})
 
 router.put('/changeStatus', async(req, res) => {
     let {status, cid} = req.body
@@ -43,9 +51,8 @@ router.put('/changeStatus', async(req, res) => {
 
 router.post("/upload", upload.single("productImage"), async (req, res) => {
     const {file, body} = req
-    
     let cid = await ipfsAdd(fs.readFileSync(`${file.destination}/${file.filename}`))
-    let imgUri = `https://ipfs.io/ipfs/${cid}`
+    let imgUri = `${cid}`
     let productMetaData = {
         name: body.name,
         description: body.description,
