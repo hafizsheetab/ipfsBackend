@@ -9,5 +9,12 @@ const OrderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true
     },
+    buyerAccountAddress: {
+        type: string,
+        required: true
+    },
+    txId: {
+        type: String
+    }
 })
 module.exports = mongoose.model('order', OrderSchema)

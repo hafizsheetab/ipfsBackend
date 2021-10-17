@@ -17,6 +17,11 @@ const upload = multer({
     storage: storage
 })
 
+router.get('/addedProducts', async(req, res) => {
+    let products = await Product.find({added: true})
+    res.json(products)
+})
+
 router.get('/', async(req, res) => {
     let products = await Product.find()
     res.json(products)
@@ -46,6 +51,19 @@ router.put('/changeStatus', async(req, res) => {
     let product = await Product.findOne({cid})
     product.status = status
     await product.save()
+    res.json(product)
+})
+
+router.post("/addProduct", async(req, res) => {
+    let {cid, seller} = req.body
+    let filter = {cid}
+    let update = {
+        added: true,
+        status: "Ready For Sale",
+        seller: seller._id
+    }
+    await Product.findOneAndUpdate(filter, update)
+    let product = await Product.findOne(filter)
     res.json(product)
 })
 

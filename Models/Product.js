@@ -13,6 +13,10 @@ const ProductSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    ordered: {
+        type: Boolean,
+        default: false
+    },
     status: {
         type: String,
         enum: ['Not Ready For Sale','Ready For Sale', 'Shipped To Wearhouse', 'Received By Warehouse', 'Ready For Delivery', 'Picked Up For Deliver', 'Received']

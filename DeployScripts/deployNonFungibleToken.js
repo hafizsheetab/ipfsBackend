@@ -10,6 +10,7 @@ module.exports = async () => {
     let instance = await nonFungibleTokenContract
         .deploy({
             data: nonFungibleTokenByteCode.object,
+            arguments: ["NFT", "NFT"]
         })
         .send({
             from: "0x4dbF5d143912f1cA1E37Ea99d91C31C3D65e6b71",
@@ -21,7 +22,7 @@ module.exports = async () => {
             name: "Product",
             address: instance._address,
             type: "NFT",
-            abi: supplyChainContractAbi
+            abi: nonFungibleTokenAbi
         })
         await tokenContract.save()
 };

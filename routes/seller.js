@@ -1,15 +1,17 @@
 const express = require("express");
+const auth = require("../middleware/auth");
 const router = express.Router();
 const Seller = require("../Models/Seller");
 
-router.post("/", async (req, res) => {
-    let { name, address, email, phone, accountAddress } = req.body;
+router.post("/",auth, async (req, res) => {
+    let { name, address, email, phone } = req.body;
+    let accountAddress = req.accountAddress
     console.log(accountAddress)
     let filter = {accountAddress: accountAddress}
     let seller = await Seller.findOne(filter);
     if (seller) {
         let update = {
-            name, address, email, phone, accountAddress
+            name, address, email, phone
         }
         await Seller.findOneAndUpdate(filter, update)
         let seller = await Seller.findOne(filter);
@@ -21,15 +23,15 @@ router.post("/", async (req, res) => {
         address,
         phone,
         email,
-        accountAddress,
+        accountAddress
     });
     await seller.save();
     res.json(seller);
 });
 
-router.get("/:accountAddress", async (req, res) => {
+router.get("/",auth, async (req, res) => {
     const { accountAddress } = req.params;
-    let seller = await Seller.findOne({accountAddress});
+    let seller = await Seller.findOne({accountAddress: req.accountAddress});
     if (seller) {
         return res.json(seller);
     }

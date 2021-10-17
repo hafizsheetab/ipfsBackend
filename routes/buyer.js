@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Buyer = require("../Models/Buyer");
 
-router.post("/", async (req, res) => {
-    let { firstName, lastName, address, phone, email, accountAddress } =
+router.post("/", auth, async (req, res) => {
+    let { firstName, lastName, address, phone, email } =
         req.body;
+    let accountAddress = req.body
     let buyer = await Buyer.findOne({ accountAddress });
     if (buyer) {
         return res.json(buyer);
@@ -21,7 +22,7 @@ router.post("/", async (req, res) => {
     res.json(buyer)
 });
 
-router.get("/:accountAddress", async(req, res) => {
+router.get("/", auth, async(req, res) => {
     const {accountAddress} = req.params
     let buyer = await Buyer.findOne(accountAddress)
     if(buyer){

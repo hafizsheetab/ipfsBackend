@@ -3,10 +3,11 @@ const router = express.Router()
 const Order = require('../Models/Order')
 
 router.post('/', async(req, res) => {
-    const{productId, buyerId} = req.body
+    const{productId, buyerId, txId} = req.body
     let order = new Order({
         product: productId,
-        buyer: buyerId
+        buyer: buyerId,
+        txId
     })
     await order.save()
     res.json(order)
