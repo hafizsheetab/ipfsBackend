@@ -4,7 +4,8 @@ const router = express.Router();
 const Product = require("../Models/Product");
 const multer = require("multer");
 const path = require("path")
-const fs = require('fs')
+const fs = require('fs');
+const auth = require("../middleware/auth");
 
 const storage = multer.diskStorage({
     destination:'./upload/images',
@@ -38,14 +39,6 @@ router.get("/:cid", async (req, res) => {
     res.json(productIpfs);
 });
 
-router.get("/image/:cid", async(req, res) => {
-    console.log('hi')
-    const {cid} = req.params;
-    const url = await ipfsGetImage(cid)
-    console.log(url)
-    res.json(url)
-})
-
 router.put('/changeStatus', async(req, res) => {
     let {status, cid} = req.body
     let product = await Product.findOne({cid})
@@ -54,21 +47,25 @@ router.put('/changeStatus', async(req, res) => {
     res.json(product)
 })
 
-router.post("/addProduct", async(req, res) => {
-    let {cid, seller} = req.body
+router.post("/addProduct", auth, async(req, res) => {
+    let {cid} = req.body
+    let accountAddress = req.accountAddress
     let filter = {cid}
+    let product = await Product.findOne(filter)
+    if(product.sellerAccountAddress !== accountAddress){
+        return res.json({error: "Not Authorized to add this Product"})
+    }
     let update = {
         added: true,
         status: "Ready For Sale",
-        seller: seller._id
     }
     await Product.findOneAndUpdate(filter, update)
-    let product = await Product.findOne(filter)
+    product = await Product.findOne(filter)
     res.json(product)
 })
 
-router.post("/upload", upload.single("productImage"), async (req, res) => {
-    const {file, body} = req
+router.post("/upload",[auth, upload.single("productImage")], async (req, res) => {
+    const {file, body, accountAddress} = req
     let cid = await ipfsAdd(fs.readFileSync(`${file.destination}/${file.filename}`))
     let imgUri = `${cid}`
     let productMetaData = {
@@ -83,7 +80,8 @@ router.post("/upload", upload.single("productImage"), async (req, res) => {
     console.log(req.file);
     let product = new Product({
         cid,
-        status: 'Not Ready For Sale'
+        status: 'Not Ready For Sale',
+        sellerAccountAddress: accountAddress
     })
     await product.save()
     res.json({ product });

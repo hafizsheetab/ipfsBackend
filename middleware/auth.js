@@ -1,4 +1,5 @@
 module.exports = function (req, res, next){
+    console.log(req.header('x-auth-accountAddress'))
     const accountAddress = req.header('x-auth-accountAddress')
 
     if(!accountAddress){

@@ -6,8 +6,8 @@ const ProductSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    seller: {
-        type: mongoose.Schema.Types.ObjectId,
+    sellerAccountAddress: {
+        type: String,
     },
     added: {
         type: Boolean,

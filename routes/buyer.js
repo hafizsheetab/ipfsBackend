@@ -5,7 +5,7 @@ const Buyer = require("../Models/Buyer");
 router.post("/", auth, async (req, res) => {
     let { firstName, lastName, address, phone, email } =
         req.body;
-    let accountAddress = req.body
+    let accountAddress = req.accountAddress
     let buyer = await Buyer.findOne({ accountAddress });
     if (buyer) {
         return res.json(buyer);
@@ -23,7 +23,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 router.get("/", auth, async(req, res) => {
-    const {accountAddress} = req.params
+    const {accountAddress} = req.accountAddress
     let buyer = await Buyer.findOne(accountAddress)
     if(buyer){
         return res.json(buyer)

@@ -30,8 +30,8 @@ router.post("/",auth, async (req, res) => {
 });
 
 router.get("/",auth, async (req, res) => {
-    const { accountAddress } = req.params;
-    let seller = await Seller.findOne({accountAddress: req.accountAddress});
+    const { accountAddress } = req;
+    let seller = await Seller.findOne({accountAddress});
     if (seller) {
         return res.json(seller);
     }
