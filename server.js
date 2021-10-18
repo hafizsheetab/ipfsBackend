@@ -3,9 +3,11 @@ const {ipfsStart} = require('./config/ipfsNode')
 const cors = require('cors')
 require('dotenv').config()
 const connectDB = require('./Config/db');
+const listenForStatusChangeOnSupplyChain = require('./ListenerScripts/listenForStatusChangeOnSupplyChain');
 const app = express()
 
-
+//listener Scripts
+listenForStatusChangeOnSupplyChain()
 //starting the ipfs node
 ipfsStart()
 //Connecting to the Database
@@ -17,7 +19,9 @@ app.get('/',(req,res) => res.send(`API Running`))
 app.use('/api/deploy', require('./routes/deploy'))
 app.use('/api/product', require('./routes/product'))
 app.use('/api/seller', require('./routes/seller'))
-
+app.use('/api/buyer', require('./routes/buyer'))
+app.use('/api/order', require('./routes/order'))
+app.use('/api/supplyChainEvent', require('./routes/supplyChainEvent'))
 
 if (process.env.NODE_ENV === 'production') {
     // Set static folder

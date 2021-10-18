@@ -19,7 +19,7 @@ const upload = multer({
 })
 
 router.get('/addedProducts', async(req, res) => {
-    let products = await Product.find({added: true})
+    let products = await Product.find({added: true, ordered: false})
     res.json(products)
 })
 
@@ -34,9 +34,8 @@ router.get("/:cid", async (req, res) => {
     const data = await ipfsGet(cid)
     console.log(data[1])
     let productIpfs = data[1]
-    let productDb = await Product.findOne({cid: cid})
     // productDb = await populateProduct(productDb)
-    res.json(productIpfs);
+    res.json(JSON.parse(productIpfs));
 });
 
 router.put('/changeStatus', async(req, res) => {
@@ -49,6 +48,7 @@ router.put('/changeStatus', async(req, res) => {
 
 router.post("/addProduct", auth, async(req, res) => {
     let {cid} = req.body
+    console.log(cid)
     let accountAddress = req.accountAddress
     let filter = {cid}
     let product = await Product.findOne(filter)

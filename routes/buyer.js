@@ -1,30 +1,32 @@
 const express = require("express");
+const auth = require("../middleware/auth");
 const router = express.Router();
 const Buyer = require("../Models/Buyer");
 
 router.post("/", auth, async (req, res) => {
-    let { firstName, lastName, address, phone, email } =
+    let { firstName, lastName, country, addressLine1, addressLine2, town, state, postCode, phone, email } =
         req.body;
+    
     let accountAddress = req.accountAddress
-    let buyer = await Buyer.findOne({ accountAddress });
+    console.log(accountAddress)
+    let filter = {accountAddress}
+    let buyer = await Buyer.findOne(filter);
     if (buyer) {
-        return res.json(buyer);
+       let update = {firstName, lastName, country, addressLine1, addressLine2, town, state, postCode, phone, email, accountAddress}
+       await Buyer.findOneAndUpdate(filter, update)
+       buyer = await Buyer.findOne(filter)
+       return res.json(buyer)
     }
     buyer = new Buyer({
-        firstName,
-        lastName,
-        address,
-        phone,
-        email,
-        accountAddress,
+        firstName, lastName, country, addressLine1, addressLine2, town, state, postCode, phone, email, accountAddress
     });
     await buyer.save()
     res.json(buyer)
 });
 
 router.get("/", auth, async(req, res) => {
-    const {accountAddress} = req.accountAddress
-    let buyer = await Buyer.findOne(accountAddress)
+    const {accountAddress} = req
+    let buyer = await Buyer.findOne({accountAddress})
     if(buyer){
         return res.json(buyer)
     }

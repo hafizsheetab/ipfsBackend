@@ -11,6 +11,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
+    "ethers": "^5.4.7",
     "express": "^4.17.1",
     "ipfs": "^0.58.3",
     "it-concat": "^2.0.0",

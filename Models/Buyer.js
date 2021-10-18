@@ -7,10 +7,25 @@ const BuyerSchema = new mongoose.Schema({
     lastName: {
         type: String
     },
-    address: {
+    country: {
+        type: String
+    },
+    addressLine1: {
+        type: String
+    },
+    addressLine2: {
+        type: String
+    },
+    town: {
+        type: String
+    },
+    state: {
         type: String
     },
     phone: {
+        type: String
+    },
+    postCode: {
         type: String
     },
     email: {
