@@ -18,7 +18,6 @@ async function ipfsGet(cid){
 }
 
 async function ipfsGetImage(cid){
-    console.log(cid)
     for await (const file of ipfsNode.get(cid)){
         const content = []
         if(file.content){

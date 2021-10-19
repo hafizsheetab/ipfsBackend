@@ -6,7 +6,6 @@ const Seller = require("../Models/Seller");
 router.post("/",auth, async (req, res) => {
     let { name, address, email, phone } = req.body;
     let accountAddress = req.accountAddress
-    console.log(accountAddress)
     let filter = {accountAddress: accountAddress}
     let seller = await Seller.findOne(filter);
     if (seller) {

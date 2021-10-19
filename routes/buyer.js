@@ -8,7 +8,6 @@ router.post("/", auth, async (req, res) => {
         req.body;
     
     let accountAddress = req.accountAddress
-    console.log(accountAddress)
     let filter = {accountAddress}
     let buyer = await Buyer.findOne(filter);
     if (buyer) {

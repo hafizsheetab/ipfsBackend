@@ -32,7 +32,6 @@ router.get('/', async(req, res) => {
 router.get("/:cid", async (req, res) => {
     const { cid } = req.params;
     const data = await ipfsGet(cid)
-    console.log(data[1])
     let productIpfs = data[1]
     // productDb = await populateProduct(productDb)
     res.json(JSON.parse(productIpfs));
@@ -48,7 +47,6 @@ router.put('/changeStatus', async(req, res) => {
 
 router.post("/addProduct", auth, async(req, res) => {
     let {cid} = req.body
-    console.log(cid)
     let accountAddress = req.accountAddress
     let filter = {cid}
     let product = await Product.findOne(filter)

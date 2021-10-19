@@ -4,9 +4,11 @@ const cors = require('cors')
 require('dotenv').config()
 const connectDB = require('./Config/db');
 const listenForStatusChangeOnSupplyChain = require('./ListenerScripts/listenForStatusChangeOnSupplyChain');
+const listenForTokenTransaction = require('./ListenerScripts/listenForTokenTransaction');
 const app = express()
 
 //listener Scripts
+listenForTokenTransaction()
 listenForStatusChangeOnSupplyChain()
 //starting the ipfs node
 ipfsStart()
