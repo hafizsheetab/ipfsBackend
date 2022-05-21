@@ -10,7 +10,7 @@ module.exports = async () => {
             arguments: ["TKN", "TKN"],
         })
         .send({
-            from: "0x4dbF5d143912f1cA1E37Ea99d91C31C3D65e6b71",
+            from: "0x7Ad5d9d260EC2cFBc5058188eeEFF621eFc7D6e6",
             gas: 3000000,
             gasPrice: "1",
         });
